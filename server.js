@@ -17,7 +17,7 @@ app.post('/api/chat', (req, res) => {
     pythonPath: 'python3', // or 'python' depending on your system
     pythonOptions: ['-u'], // get print results in real-time
     scriptPath: __dirname,
-    args: [process.env.PINECONE_API_KEY, 'YOUR_ASSISTANT_NAME', messages]
+    args: [process.env.PINECONE_API_KEY, 'ti4-rules-assistant', messages]
   };
 
   PythonShell.run('chat_with_assistant.py', options, function (err, results) {
@@ -29,17 +29,6 @@ app.post('/api/chat', (req, res) => {
       res.json(JSON.parse(results[0]));
     }
   });
-});
-
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
-
-const port = process.env.PORT || 5000;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
 });
 
 // The "catchall" handler: for any request that doesn't

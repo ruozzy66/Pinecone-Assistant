@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import { ChakraProvider, Box, VStack, Input, Button, Text, Flex, Spacer } from '@chakra-ui/react';
+import { ChakraProvider, Box, VStack, Input, Button, Text, Flex, Spinner } from '@chakra-ui/react';
 
 const App = () => {
   const [messages, setMessages] = useState([]);
@@ -18,7 +18,7 @@ const App = () => {
     if (input.trim() === '') return;
 
     const newMessage = { role: 'user', content: input };
-    setMessages([...messages, newMessage]);
+    setMessages(prevMessages => [...prevMessages, newMessage]);
     setInput('');
     setIsLoading(true);
 
@@ -72,6 +72,11 @@ const App = () => {
               </Box>
             </Flex>
           ))}
+          {isLoading && (
+            <Flex justifyContent="flex-start">
+              <Spinner size="sm" />
+            </Flex>
+          )}
           <div ref={messagesEndRef} />
         </VStack>
         <Flex padding={4}>
@@ -79,13 +84,15 @@ const App = () => {
             value={input} 
             onChange={(e) => setInput(e.target.value)} 
             placeholder="Type a message..." 
-            onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+            onKeyPress={(e) => e.key === 'Enter' && !isLoading && sendMessage()}
+            disabled={isLoading}
           />
           <Button 
             onClick={sendMessage} 
             marginLeft={2} 
             isLoading={isLoading}
             loadingText="Sending"
+            disabled={isLoading || input.trim() === ''}
           >
             Send
           </Button>

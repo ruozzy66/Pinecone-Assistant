@@ -7,13 +7,17 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "axios": "^1.4.0",
+    "css-select": "^5.1.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "framer-motion": "^10.15.0",
     "http-proxy-middleware": "^2.0.6",
+    "nth-check": "^2.1.1",
+    "postcss": "^8.4.40",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "^5.0.1",
+    "svgo": "^3.3.2"
   },
   "scripts": {
     "start": "node server.js",
@@ -42,7 +46,16 @@
     ]
   },
   "engines": {
-    "node": "18.x",
-    "npm": "9.x"
+    "node": "18.x || 20.x",
+    "npm": "9.x || 10.x"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/plugin-transform-class-properties": "^7.24.7",
+    "@babel/plugin-transform-nullish-coalescing-operator": "^7.24.7",
+    "@babel/plugin-transform-numeric-separator": "^7.24.7",
+    "@babel/plugin-transform-optional-chaining": "^7.24.8",
+    "@babel/plugin-transform-private-methods": "^7.24.7",
+    "@rollup/plugin-terser": "^0.4.4"
   }
 }

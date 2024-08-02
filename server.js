@@ -24,18 +24,34 @@ app.post('/api/chat', (req, res) => {
   PythonShell.run('chat_with_assistant.py', options, function (err, results) {
     if (err) {
       console.error('Error in Python script:', err);
-      res.status(500).json({ error: 'An error occurred while processing your request.' });
-    } else {
-      console.log('Python script output:', results);
-      try {
-        const parsedResults = JSON.parse(results[0]);
-        res.json(parsedResults);
-      } catch (parseError) {
-        console.error('Error parsing Python script output:', parseError);
-        res.status(500).json({ error: 'An error occurred while processing the response.' });
-      }
+      return res.status(500).json({ error: 'An error occurred while processing your request.', details: err.message });
+    }
+    
+    console.log('Python script output:', results);
+    
+    if (!results || results.length === 0) {
+      return res.status(500).json({ error: 'No output from Python script.' });
+    }
+
+    try {
+      const parsedResults = JSON.parse(results[0]);
+      res.json(parsedResults);
+    } catch (parseError) {
+      console.error('Error parsing Python script output:', parseError);
+      res.status(500).json({ 
+        error: 'An error occurred while processing the response.', 
+        details: parseError.message,
+        rawOutput: results[0]
+      });
     }
   });
+});
+
+// CORS middleware
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
 });
 
 // The "catchall" handler: for any request that doesn't

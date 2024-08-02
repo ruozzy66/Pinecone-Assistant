@@ -26,14 +26,18 @@ const App = () => {
       const response = await axios.post('/api/chat', {
         messages: [...messages, newMessage],
       });
-
-      const assistantMessage = response.data.chat_completion.choices[0].message;
-      setMessages(prevMessages => [...prevMessages, assistantMessage]);
+      console.log('Server response:', response.data);
+      
+      if (response.data && response.data.choices && response.data.choices.length > 0) {
+        const assistantMessage = response.data.choices[0].message;
+        setMessages(prevMessages => [...prevMessages, assistantMessage]);
+      } else {
+        console.error('Unexpected response structure:', response.data);
+        throw new Error('Unexpected response structure');
+      }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error in chat request:', error);
       setMessages(prevMessages => [...prevMessages, { role: 'assistant', content: 'Sorry, I encountered an error. Please try again.' }]);
-    } finally {
-      setIsLoading(false);
     }
   };
 

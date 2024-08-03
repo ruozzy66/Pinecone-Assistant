@@ -91,10 +91,11 @@ const App = () => {
         <Flex 
           padding={4} 
           position={firstResponse ? "relative" : "absolute"} 
-          top={firstResponse ? "auto" : "50%"} 
-          transform={firstResponse ? "none" : "translateY(-50%)"} 
-          width="100%" 
-          justifyContent="center"
+          top={firstResponse ? "auto" : "10px"} 
+          right={firstResponse ? "auto" : "10px"} 
+          transform={firstResponse ? "none" : "none"} 
+          width={firstResponse ? "100%" : "auto"} 
+          justifyContent={firstResponse ? "center" : "flex-end"}
         >
           <Input 
             value={input} 
@@ -102,6 +103,7 @@ const App = () => {
             placeholder="Type a message..." 
             onKeyDown={(e) => e.key === 'Enter' && !isLoading && sendMessage()}
             disabled={isLoading}
+            width={firstResponse ? "80%" : "300px"}  // Maintain previous width
           />
           <Button 
             onClick={sendMessage} 

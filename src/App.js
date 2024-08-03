@@ -1,74 +1,112 @@
-import React, { useState } from 'react';
-import './App.css';
+import React, { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
+import { ChakraProvider, Box, VStack, Input, Button, Text, Flex, Spinner } from '@chakra-ui/react';
 
-function App() {
+const App = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(scrollToBottom, [messages]);
 
   const sendMessage = async () => {
-    if (!input.trim()) return;
+    if (input.trim() === '') return;
 
-    const userMessage = { role: 'user', content: input };
-    const updatedMessages = [...messages, userMessage];
-    setMessages(updatedMessages);
+    console.log('Sending message:', input);
+    const newMessage = { role: 'user', content: input };
+    setMessages(prevMessages => [...prevMessages, newMessage]);
     setInput('');
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: updatedMessages })
+      const response = await axios.post('/api/chat', {
+        messages: [...messages, newMessage],
       });
-
-      const data = await response.json();
-      if (data.error) {
-        throw new Error(data.details);
+      console.log('Server response:', response.data);
+      
+      if (response.data && response.data.choices && response.data.choices.length > 0) {
+        const assistantMessage = response.data.choices[0].message;
+        setMessages(prevMessages => [...prevMessages, assistantMessage]);
+      } else {
+        console.error('Unexpected response structure:', response.data);
+        throw new Error('Unexpected response structure');
       }
-
-      const assistantMessage = data.choices[0].message;
-      assistantMessage.content = processLinks(assistantMessage.content);
-
-      setMessages([...updatedMessages, assistantMessage]);
     } catch (error) {
-      setMessages([...updatedMessages, { role: 'assistant', content: 'Sorry, I encountered an error. Please try again.' }]);
+      console.error('Error in chat request:', error);
+      setMessages(prevMessages => [...prevMessages, { role: 'assistant', content: 'Sorry, I encountered an error. Please try again.' }]);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !isLoading) {
-      sendMessage();
-    }
-  };
-
-  const processLinks = (text) => {
-    const urlRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-    return text.replace(urlRegex, '<a href="$2" target="_blank">$1</a>');
-  };
-
   return (
-    <div className="App">
-      <div className="chat-window">
-        {messages.map((msg, index) => (
-          <div key={index} className={`chat-message ${msg.role}`}>
-            <div dangerouslySetInnerHTML={{ __html: msg.content }} />
-          </div>
-        ))}
-        {isLoading && <div className="loading">Loading...</div>}
-      </div>
-      <input
-        type="text"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onKeyPress={handleKeyPress}
-        placeholder="Type a message..."
-      />
-      <button onClick={sendMessage} disabled={isLoading}>Send</button>
-    </div>
+    <ChakraProvider>
+      <Box maxWidth="600px" margin="auto" height="100vh" display="flex" flexDirection="column">
+        <VStack 
+          spacing={4} 
+          align="stretch" 
+          flex={1} 
+          overflowY="auto" 
+          padding={4}
+          css={{
+            '&::-webkit-scrollbar': {
+              width: '4px',
+            },
+            '&::-webkit-scrollbar-track': {
+              width: '6px',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              background: 'gray.300',
+              borderRadius: '24px',
+            },
+          }}
+        >
+          {messages.map((message, index) => (
+            <Flex key={index} justifyContent={message.role === 'user' ? 'flex-end' : 'flex-start'}>
+              <Box 
+                maxWidth="70%" 
+                backgroundColor={message.role === 'user' ? 'blue.500' : 'gray.200'}
+                color={message.role === 'user' ? 'white' : 'black'}
+                borderRadius="lg" 
+                padding={3}
+                dangerouslySetInnerHTML={{ __html: message.content }} // Added to render HTML content
+              >
+              </Box>
+            </Flex>
+          ))}
+          {isLoading && (
+            <Flex justifyContent="flex-start">
+              <Spinner size="sm" />
+            </Flex>
+          )}
+          <div ref={messagesEndRef} />
+        </VStack>
+        <Flex padding={4}>
+          <Input 
+            value={input} 
+            onChange={(e) => setInput(e.target.value)} 
+            placeholder="Type a message..." 
+            onKeyDown={(e) => e.key === 'Enter' && !isLoading && sendMessage()}
+            disabled={isLoading}
+          />
+          <Button 
+            onClick={sendMessage} 
+            marginLeft={2} 
+            isLoading={isLoading}
+            loadingText="Sending"
+            disabled={isLoading || input.trim() === ''}
+          >
+            Send
+          </Button>
+        </Flex>
+      </Box>
+    </ChakraProvider>
   );
-}
+};
 
 export default App;

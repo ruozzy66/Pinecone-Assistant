@@ -31,11 +31,13 @@ app.post('/api/chat', (req, res) => {
     console.log('Python script output:', results);
     
     if (!results || results.length === 0) {
+      console.log('No output from Python script.');
       return res.status(500).json({ error: 'No output from Python script.' });
     }
 
     try {
       const parsedResults = JSON.parse(results[0]);
+      console.log('Parsed results:', parsedResults);
       res.json(parsedResults);
     } catch (parseError) {
       console.error('Error parsing Python script output:', parseError);

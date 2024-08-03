@@ -17,6 +17,7 @@ const App = () => {
   const sendMessage = async () => {
     if (input.trim() === '') return;
 
+    console.log('Sending message:', input);
     const newMessage = { role: 'user', content: input };
     setMessages(prevMessages => [...prevMessages, newMessage]);
     setInput('');
@@ -38,6 +39,8 @@ const App = () => {
     } catch (error) {
       console.error('Error in chat request:', error);
       setMessages(prevMessages => [...prevMessages, { role: 'assistant', content: 'Sorry, I encountered an error. Please try again.' }]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -88,7 +91,7 @@ const App = () => {
             value={input} 
             onChange={(e) => setInput(e.target.value)} 
             placeholder="Type a message..." 
-            onKeyPress={(e) => e.key === 'Enter' && !isLoading && sendMessage()}
+            onKeyDown={(e) => e.key === 'Enter' && !isLoading && sendMessage()}
             disabled={isLoading}
           />
           <Button 
@@ -107,3 +110,4 @@ const App = () => {
 };
 
 export default App;
+

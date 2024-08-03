@@ -6,15 +6,17 @@ from pinecone_plugins.assistant.models.chat import Message
 def remove_after_references(text):
     """Remove everything after the word 'References' including it."""
     ref_index = text.find('References')
-    if ref_index != -1:
+    if (ref_index != -1):
         return text[:ref_index].strip()
     return text
 
 def chat_with_assistant(api_key, assistant_name, messages):
     try:
+        print("Connecting to Pinecone")
         pc = Pinecone(api_key=api_key)
         assistant = pc.assistant.describe_assistant(assistant_name)
         
+        print("Processing messages:", messages)
         chat_context = [Message(**msg) for msg in json.loads(messages)]
         response = assistant.chat_completions(messages=chat_context)
         
@@ -36,9 +38,11 @@ def chat_with_assistant(api_key, assistant_name, messages):
             "model": response.model
         }
         
+        print("Response generated:", serializable_response)
         return json.dumps(serializable_response)
     
     except Exception as e:
+        print("Error occurred:", e)
         return json.dumps({
             "error": "An error occurred during the assistant interaction.",
             "details": str(e)

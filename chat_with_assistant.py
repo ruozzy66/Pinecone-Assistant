@@ -6,7 +6,7 @@ from pinecone_plugins.assistant.models.chat import Message
 def remove_after_references(text):
     """Remove everything after the word 'References' including it."""
     ref_index = text.find('References')
-    if (ref_index != -1):
+    if ref_index != -1:
         return text[:ref_index].strip()
     return text
 
@@ -16,7 +16,8 @@ def format_response(text):
     formatted_lines = []
     for line in lines:
         # Replace ** with <b> HTML tags for bold text
-        line = line.replace('**', '<b>').replace('**', '</b>')
+        while '**' in line:
+            line = line.replace('**', '<b>', 1).replace('**', '</b>', 1)
         
         # Ensure the bullet points are correctly formatted
         if line.strip():

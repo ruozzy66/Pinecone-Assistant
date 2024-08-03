@@ -10,6 +10,29 @@ def remove_after_references(text):
         return text[:ref_index].strip()
     return text
 
+def format_references(text):
+    """Format the references section by making text name clickable and hiding URL."""
+    if 'References' not in text:
+        return text
+    
+    parts = text.split('References')
+    main_text = parts[0]
+    references_text = parts[1]
+    
+    formatted_references = []
+    for line in references_text.split('\n'):
+        if '[' in line and ']' in line and '(' in line and ')' in line:
+            ref_number = line.split('[')[1].split(']')[0]
+            url_start = line.find('(')
+            url_end = line.find(')')
+            ref_url = line[url_start+1:url_end]
+            ref_text_name = line[:url_start].split(']')[-1].strip()
+            clickable_text = f'<a href="{ref_url}">{ref_text_name}</a>'
+            formatted_references.append(f'[{ref_number}] {clickable_text}')
+    
+    formatted_references_text = 'References: ' + ', '.join(formatted_references)
+    return main_text + '\n\n' + formatted_references_text
+
 def format_response(text):
     """Format the response with bullet points and appropriate formatting."""
     lines = text.split('\n')
@@ -36,9 +59,10 @@ def chat_with_assistant(api_key, assistant_name, messages):
         chat_context = [Message(**msg) for msg in json.loads(messages)]
         response = assistant.chat_completions(messages=chat_context)
         
-        # Remove everything after 'References' and format the response
+        # Format the response and references section
         for choice in response.choices:
-            choice.message.content = format_response(remove_after_references(choice.message.content))
+            formatted_content = format_references(choice.message.content)
+            choice.message.content = format_response(remove_after_references(formatted_content))
         
         # Convert the response to a serializable format
         serializable_response = {

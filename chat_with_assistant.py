@@ -16,12 +16,10 @@ def format_references(text):
     for line in references_text.split('\n'):
         line = line.strip()
         if line:
-            if line[0].isdigit() and '. [' in line and '](' in line:
-                # This is a file reference
+            if line[0].isdigit() and '. ' in line:
+                # This is a numbered reference
                 ref_number, rest = line.split('. ', 1)
-                file_name = rest.split('[', 1)[1].split(']', 1)[0]
-                url = rest.split('(', 1)[1].split(')', 1)[0]
-                formatted_line = f'{ref_number}. <a href="{url}" target="_blank">{file_name}</a>'
+                formatted_line = f'{ref_number}. {rest}'
             else:
                 # This is a regular reference or other text
                 formatted_line = line
@@ -49,12 +47,19 @@ def format_response(text):
             if not in_list:
                 formatted_lines.append('<ul>')
                 in_list = True
-            formatted_lines.append(f'<li>{line[2:]}</li>')
+            # Remove the asterisk and any leading number with dot
+            content = line[2:].lstrip()
+            if content[0].isdigit() and '. ' in content:
+                number, rest = content.split('. ', 1)
+                formatted_lines.append(f'<li>{number}. {rest}</li>')
+            else:
+                formatted_lines.append(f'<li>{content}</li>')
         elif line[0].isdigit() and '. ' in line:
             if not in_list:
                 formatted_lines.append('<ul>')
                 in_list = True
-            formatted_lines.append(f'<li>{line}</li>')
+            number, rest = line.split('. ', 1)
+            formatted_lines.append(f'<li>{number}. {rest}</li>')
         else:
             if in_list:
                 formatted_lines.append('</ul>')

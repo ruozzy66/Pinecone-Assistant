@@ -10,6 +10,17 @@ def remove_after_references(text):
         return text[:ref_index].strip()
     return text
 
+def format_response(text):
+    """Format the response with bullet points and appropriate formatting."""
+    lines = text.split('\n')
+    formatted_lines = []
+    for line in lines:
+        if line.startswith('1.'):
+            formatted_lines.append('\n'.join([f'* {item.strip()}' for item in line.split('1.')[1].split('.') if item.strip()]))
+        else:
+            formatted_lines.append(line)
+    return '\n'.join(formatted_lines)
+
 def chat_with_assistant(api_key, assistant_name, messages):
     try:
         pc = Pinecone(api_key=api_key)
@@ -18,9 +29,9 @@ def chat_with_assistant(api_key, assistant_name, messages):
         chat_context = [Message(**msg) for msg in json.loads(messages)]
         response = assistant.chat_completions(messages=chat_context)
         
-        # Remove everything after 'References'
+        # Remove everything after 'References' and format the response
         for choice in response.choices:
-            choice.message.content = remove_after_references(choice.message.content)
+            choice.message.content = format_response(remove_after_references(choice.message.content))
         
         # Convert the response to a serializable format
         serializable_response = {
@@ -51,3 +62,4 @@ if __name__ == "__main__":
     
     result = chat_with_assistant(api_key, assistant_name, messages)
     print(result)
+

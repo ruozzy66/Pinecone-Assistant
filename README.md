@@ -1,6 +1,6 @@
 # Pinecone Assistant Chat (Twilight Imperium IV Edition Rules Bot)
 
-A modern web-based chatbot interface for interacting with Pinecone's AI assistant, specifically designed for answering questions about Twilight Imperium 4 rules.
+A modern web-based chatbot interface for interacting with Pinecone's AI assistant. I connected it to Twilight Imperium IV Edition board game rules knowledge base, but you can create your own knoledge base using Pinecone Assistant. 
 
 ## 🌟 Features
 
@@ -22,7 +22,7 @@ A modern web-based chatbot interface for interacting with Pinecone's AI assistan
 
 1. Clone the repository:
    ```
-   git clone https://github.com/your-username/pinecone-assistant-chat.git
+   git clone https://github.com/ruozzy66/pinecone-assistant-chat.git
    cd pinecone-assistant-chat
    ```
 
@@ -47,7 +47,7 @@ A modern web-based chatbot interface for interacting with Pinecone's AI assistan
 
 ### Deployment to Heroku
 
-1. Create a Heroku account and install the Heroku CLI.
+1. [Create a Heroku account](https://dashboard.heroku.com/) and install the Heroku CLI.
 
 2. Log in to Heroku:
    ```
@@ -76,7 +76,7 @@ A modern web-based chatbot interface for interacting with Pinecone's AI assistan
 
 ## 📖 Usage
 
-Once the application is running, you can start chatting with the Pinecone Assistant about Twilight Imperium 4 rules. Simply type your question into the input field and press Enter or click the Send button.
+Once the application is running, you can start chatting with the you own Pinecone Assistant. Simply type your question into the input field and press Enter or click the Send button.
 
 ## 🛠 Tech Stack
 

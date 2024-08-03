@@ -18,11 +18,11 @@ def format_references(text):
     formatted_references = []
     for match in re.finditer(pattern, references_text):
         ref_number, file_name, url = match.groups()
-        formatted_line = f'{ref_number}. <a href="{url}" target="_blank">{file_name}</a>'
+        formatted_line = f'{ref_number}. <a href="{url}" target="_blank"><u>{file_name}</u></a>'
         formatted_references.append(formatted_line)
     
-    formatted_references_text = '<b>References:</b> ' + ' '.join(formatted_references)
-    return main_text + formatted_references_text
+    formatted_references_text = '<p><b>References:</b> ' + ' '.join(formatted_references) + '</p>'
+    return main_text + '\n\n' + formatted_references_text
 
 def format_response(text):
     """Format the response with bullet points and appropriate formatting."""

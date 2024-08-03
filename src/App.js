@@ -68,7 +68,7 @@ const App = () => {
       `}</style>
       <Box maxWidth="600px" margin="auto" height="100vh" display="flex" flexDirection="column">
         <Text fontSize="xl" textAlign="center" position="fixed" top="0" left="50%" transform="translateX(-50%)" width="100%" backgroundColor="white" zIndex="1000">
-          Twilight Imperium Fourth Edition Rules AI Assistant
+          Twilight Imperium Fourth Edition Rules Bot
         </Text>
         <Box mt="50px" flex={1} display="flex" flexDirection="column" justifyContent="space-between">
           <VStack 

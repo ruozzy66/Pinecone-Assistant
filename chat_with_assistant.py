@@ -14,14 +14,14 @@ def format_references(text):
     references_text = parts[1].strip()
     
     # Use regex to match the entire reference line
-    pattern = r'(\d+)\.\s+\[(.*?)\]\((.*?)\)'
+    pattern = r'(\d+)\.\s+(\S+)'  # Adjusted regex to match the file name pattern
     formatted_references = []
     for match in re.finditer(pattern, references_text):
-        ref_number, file_name, url = match.groups()
-        formatted_line = f'{ref_number}. <a href="{url}" target="_blank"><u>{file_name}</u></a>'
+        ref_number, file_name = match.groups()
+        formatted_line = f'{ref_number}. <a href="{file_name}" target="_blank"><u>{file_name}</u></a>'
         formatted_references.append(formatted_line)
     
-    formatted_references_text = '<p><b>References:</b> ' + ' '.join(formatted_references) + '</p>'
+    formatted_references_text = '<p><b>References:</b></p>\n' + '<br>\n'.join(formatted_references)
     return main_text + '\n\n' + formatted_references_text
 
 def format_response(text):
@@ -67,7 +67,7 @@ def chat_with_assistant(api_key, assistant_name, messages):
         # Format the response and references section
         for choice in response.choices:
             formatted_content = format_references(choice.message.content)
-            choice.message.content = format_response(formatted_content)  # Removed remove_after_references
+            choice.message.content = format_response(formatted_content)
         
         # Convert the response to a serializable format
         serializable_response = {

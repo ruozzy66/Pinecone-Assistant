@@ -6,6 +6,7 @@ const App = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [firstResponse, setFirstResponse] = useState(false);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -32,6 +33,7 @@ const App = () => {
       if (response.data && response.data.choices && response.data.choices.length > 0) {
         const assistantMessage = response.data.choices[0].message;
         setMessages(prevMessages => [...prevMessages, assistantMessage]);
+        setFirstResponse(true);  // Mark that the first response has been received
       } else {
         console.error('Unexpected response structure:', response.data);
         throw new Error('Unexpected response structure');
@@ -46,7 +48,7 @@ const App = () => {
 
   return (
     <ChakraProvider>
-      <Box maxWidth="600px" margin="auto" height="100vh" display="flex" flexDirection="column">
+      <Box maxWidth="600px" margin="auto" height="100vh" display="flex" flexDirection="column" alignItems="center">
         <VStack 
           spacing={4} 
           align="stretch" 
@@ -86,7 +88,14 @@ const App = () => {
           )}
           <div ref={messagesEndRef} />
         </VStack>
-        <Flex padding={4}>
+        <Flex 
+          padding={4} 
+          position={firstResponse ? "relative" : "absolute"} 
+          top={firstResponse ? "auto" : "50%"} 
+          transform={firstResponse ? "none" : "translateY(-50%)"} 
+          width="100%" 
+          justifyContent="center"
+        >
           <Input 
             value={input} 
             onChange={(e) => setInput(e.target.value)} 

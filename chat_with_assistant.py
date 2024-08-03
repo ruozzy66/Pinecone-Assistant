@@ -1,5 +1,6 @@
 import sys
 import json
+import re
 from pinecone import Pinecone
 from pinecone_plugins.assistant.models.chat import Message
 
@@ -12,18 +13,13 @@ def format_references(text):
     main_text = parts[0].strip()
     references_text = parts[1].strip()
     
+    # Use regex to match the entire reference line
+    pattern = r'(\d+)\.\s+\[(.*?)\]\((.*?)\)'
     formatted_references = []
-    for line in references_text.split('\n'):
-        line = line.strip()
-        if line:
-            if line[0].isdigit() and '. ' in line:
-                # This is a numbered reference
-                ref_number, rest = line.split('. ', 1)
-                formatted_line = f'{ref_number}. {rest}'
-            else:
-                # This is a regular reference or other text
-                formatted_line = line
-            formatted_references.append(formatted_line)
+    for match in re.finditer(pattern, references_text):
+        ref_number, file_name, url = match.groups()
+        formatted_line = f'{ref_number}. <a href="{url}" target="_blank">{file_name}</a>'
+        formatted_references.append(formatted_line)
     
     formatted_references_text = '<b>References:</b> ' + ' '.join(formatted_references)
     return main_text + formatted_references_text
@@ -40,26 +36,15 @@ def format_response(text):
             continue
         
         # Replace ** with <b> HTML tags for bold text
-        while '**' in line:
-            line = line.replace('**', '<b>', 1).replace('**', '</b>', 1)
+        line = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', line)
         
         if line.startswith('* '):
             if not in_list:
                 formatted_lines.append('<ul>')
                 in_list = True
-            # Remove the asterisk and any leading number with dot
-            content = line[2:].lstrip()
-            if content[0].isdigit() and '. ' in content:
-                number, rest = content.split('. ', 1)
-                formatted_lines.append(f'<li>{number}. {rest}</li>')
-            else:
-                formatted_lines.append(f'<li>{content}</li>')
-        elif line[0].isdigit() and '. ' in line:
-            if not in_list:
-                formatted_lines.append('<ul>')
-                in_list = True
-            number, rest = line.split('. ', 1)
-            formatted_lines.append(f'<li>{number}. {rest}</li>')
+            # Remove the asterisk and any leading number
+            content = re.sub(r'^\*\s*(\d+\.\s*)?', '', line)
+            formatted_lines.append(f'<li>{content}</li>')
         else:
             if in_list:
                 formatted_lines.append('</ul>')

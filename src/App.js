@@ -54,6 +54,17 @@ const App = () => {
           width: 100%;
           height: 100%;
         }
+        .input-container {
+          position: fixed;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 100%;
+          max-width: 600px;
+          background-color: white;
+          padding: 4px;
+          z-index: 1000;
+        }
       `}</style>
       <Box maxWidth="600px" margin="auto" height="100vh" display="flex" flexDirection="column">
         <Text fontSize="xl" textAlign="center" position="fixed" top="0" left="50%" transform="translateX(-50%)" width="100%" backgroundColor="white" zIndex="1000">
@@ -99,7 +110,7 @@ const App = () => {
             )}
             <div ref={messagesEndRef} />
           </VStack>
-          <Flex padding={4} position="fixed" bottom="0" left="50%" transform="translateX(-50%)" width="100%" backgroundColor="white" zIndex="1000">
+          <Flex className="input-container">
             <Input 
               value={input} 
               onChange={(e) => setInput(e.target.value)} 

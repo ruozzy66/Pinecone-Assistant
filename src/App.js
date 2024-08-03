@@ -47,70 +47,71 @@ const App = () => {
   return (
     <ChakraProvider>
       <Box maxWidth="600px" margin="auto" height="100vh" display="flex" flexDirection="column">
-        <Text fontSize="xl" textAlign="center" mt={4} mb={4}>
+        <Text fontSize="xl" textAlign="center" mt={4} mb={4} position="fixed" top="0" left="50%" transform="translateX(-50%)" width="100%" backgroundColor="white" zIndex="1000">
           Twilight Imperium Fourth Edition Rules Assistant
         </Text>
-        <VStack 
-          spacing={4} 
-          align="stretch" 
-          flex={1} 
-          overflowY="auto" 
-          padding={4}
-          css={{
-            '&::-webkit-scrollbar': {
-              width: '4px',
-            },
-            '&::-webkit-scrollbar-track': {
-              width: '6px',
-            },
-            '&::-webkit-scrollbar-thumb': {
-              background: 'gray.300',
-              borderRadius: '24px',
-            },
-          }}
-        >
-          {messages.map((message, index) => (
-            <Flex key={index} justifyContent={message.role === 'user' ? 'flex-end' : 'flex-start'}>
-              <Box 
-                maxWidth="70%" 
-                backgroundColor={message.role === 'user' ? 'blue.500' : 'gray.200'}
-                color={message.role === 'user' ? 'white' : 'black'}
-                borderRadius="lg" 
-                padding={3}
-              >
-                <div dangerouslySetInnerHTML={{ __html: message.content }} />
-              </Box>
-            </Flex>
-          ))}
-          {isLoading && (
-            <Flex justifyContent="flex-start">
-              <Spinner size="sm" />
-            </Flex>
-          )}
-          <div ref={messagesEndRef} />
-        </VStack>
-        <Flex padding={4}>
-          <Input 
-            value={input} 
-            onChange={(e) => setInput(e.target.value)} 
-            placeholder="Type a message..." 
-            onKeyDown={(e) => e.key === 'Enter' && !isLoading && sendMessage()}
-            disabled={isLoading}
-          />
-          <Button 
-            onClick={sendMessage} 
-            marginLeft={2} 
-            isLoading={isLoading}
-            loadingText="Sending"
-            disabled={isLoading || input.trim() === ''}
+        <Box mt="60px" flex={1} display="flex" flexDirection="column">
+          <VStack 
+            spacing={4} 
+            align="stretch" 
+            flex={1} 
+            overflowY="auto" 
+            padding={4}
+            css={{
+              '&::-webkit-scrollbar': {
+                width: '4px',
+              },
+              '&::-webkit-scrollbar-track': {
+                width: '6px',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                background: 'gray.300',
+                borderRadius: '24px',
+              },
+            }}
           >
-            Send
-          </Button>
-        </Flex>
+            {messages.map((message, index) => (
+              <Flex key={index} justifyContent={message.role === 'user' ? 'flex-end' : 'flex-start'}>
+                <Box 
+                  maxWidth="70%" 
+                  backgroundColor={message.role === 'user' ? 'blue.500' : 'gray.200'}
+                  color={message.role === 'user' ? 'white' : 'black'}
+                  borderRadius="lg" 
+                  padding={3}
+                >
+                  <div dangerouslySetInnerHTML={{ __html: message.content }} />
+                </Box>
+              </Flex>
+            ))}
+            {isLoading && (
+              <Flex justifyContent="flex-start">
+                <Spinner size="sm" />
+              </Flex>
+            )}
+            <div ref={messagesEndRef} />
+          </VStack>
+          <Flex padding={4}>
+            <Input 
+              value={input} 
+              onChange={(e) => setInput(e.target.value)} 
+              placeholder="Type a message..." 
+              onKeyDown={(e) => e.key === 'Enter' && !isLoading && sendMessage()}
+              disabled={isLoading}
+            />
+            <Button 
+              onClick={sendMessage} 
+              marginLeft={2} 
+              isLoading={isLoading}
+              loadingText="Sending"
+              disabled={isLoading || input.trim() === ''}
+            >
+              Send
+            </Button>
+          </Flex>
+        </Box>
       </Box>
     </ChakraProvider>
   );
 };
 
 export default App;
-

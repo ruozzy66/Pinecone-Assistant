@@ -3,13 +3,6 @@ import json
 from pinecone import Pinecone
 from pinecone_plugins.assistant.models.chat import Message
 
-def remove_after_references(text):
-    """Remove everything after the word 'References' including it."""
-    ref_index = text.find('References')
-    if ref_index != -1:
-        return text[:ref_index].strip()
-    return text
-
 def format_references(text):
     """Format the references section by making text name clickable and hiding URL."""
     if 'References' not in text:
@@ -62,7 +55,7 @@ def chat_with_assistant(api_key, assistant_name, messages):
         # Format the response and references section
         for choice in response.choices:
             formatted_content = format_references(choice.message.content)
-            choice.message.content = format_response(remove_after_references(formatted_content))
+            choice.message.content = format_response(formatted_content)  # Removed remove_after_references
         
         # Convert the response to a serializable format
         serializable_response = {

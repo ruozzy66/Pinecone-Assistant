@@ -59,7 +59,7 @@ const App = () => {
         <Text fontSize="xl" textAlign="center" position="fixed" top="0" left="50%" transform="translateX(-50%)" width="100%" backgroundColor="white" zIndex="1000">
           Twilight Imperium Fourth Edition Rules AI Assistant
         </Text>
-        <Box mt="50px" flex={1} display="flex" flexDirection="column">
+        <Box mt="50px" flex={1} display="flex" flexDirection="column" justifyContent="space-between">
           <VStack 
             spacing={4} 
             align="stretch" 
@@ -99,13 +99,14 @@ const App = () => {
             )}
             <div ref={messagesEndRef} />
           </VStack>
-          <Flex padding={4}>
+          <Flex padding={4} position="fixed" bottom="0" left="50%" transform="translateX(-50%)" width="100%" backgroundColor="white" zIndex="1000">
             <Input 
               value={input} 
               onChange={(e) => setInput(e.target.value)} 
               placeholder="Type a message..." 
               onKeyDown={(e) => e.key === 'Enter' && !isLoading && sendMessage()}
               disabled={isLoading}
+              width="80%"
             />
             <Button 
               onClick={sendMessage} 

@@ -6,7 +6,7 @@ from pinecone_plugins.assistant.models.chat import Message
 def remove_after_references(text):
     """Remove everything after the word 'References' including it."""
     ref_index = text.find('References')
-    if ref_index != -1:
+    if (ref_index != -1):
         return text[:ref_index].strip()
     return text
 

@@ -1,4 +1,4 @@
-# Pinecone Assistant Chat
+# Pinecone Assistant Chat (Twilight Imperium IV Edition Rules Bot)
 
 A modern web-based chatbot interface for interacting with Pinecone's AI assistant, specifically designed for answering questions about Twilight Imperium 4 rules.
 

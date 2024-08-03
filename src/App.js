@@ -74,8 +74,8 @@ const App = () => {
                 color={message.role === 'user' ? 'white' : 'black'}
                 borderRadius="lg" 
                 padding={3}
+                dangerouslySetInnerHTML={{ __html: message.content }} // Added to render HTML content
               >
-                <Text>{message.content}</Text>
               </Box>
             </Flex>
           ))}
@@ -110,4 +110,3 @@ const App = () => {
 };
 
 export default App;
-

@@ -4,27 +4,29 @@ from pinecone import Pinecone
 from pinecone_plugins.assistant.models.chat import Message
 
 def format_references(text):
-    """Format the references section by making text name clickable and hiding URL."""
-    if 'References' not in text:
+    """Format the references section with improved styling."""
+    if 'References:' not in text:
         return text
     
-    parts = text.split('References')
-    main_text = parts[0]
-    references_text = parts[1]
+    parts = text.split('References:')
+    main_text = parts[0].strip()
+    references_text = parts[1].strip()
     
     formatted_references = []
     for line in references_text.split('\n'):
-        if '[' in line and ']' in line and '(' in line and ')' in line:
-            ref_number = line.split('[')[1].split(']')[0]
-            url_start = line.find('(')
-            url_end = line.find(')')
-            ref_url = line[url_start+1:url_end]
-            ref_text_name = line[:url_start].split(']')[-1].strip()
-            clickable_text = f'<a href="{ref_url}">{ref_text_name}</a>'
-            formatted_references.append(f'[{ref_number}] {clickable_text}')
+        line = line.strip()
+        if line:
+            if line.startswith('[') and ']' in line:
+                # This is a file reference
+                file_name = line.split(']')[1].strip()
+                formatted_line = f'<a href="#">{file_name}</a>'
+            else:
+                # This is a regular reference
+                formatted_line = line
+            formatted_references.append(formatted_line)
     
-    formatted_references_text = 'References: ' + ', '.join(formatted_references)
-    return main_text + '\n\n' + formatted_references_text
+    formatted_references_text = '<br><br><b>References:</b><br>' + '<br>'.join(formatted_references)
+    return main_text + formatted_references_text
 
 def format_response(text):
     """Format the response with bullet points and appropriate formatting."""

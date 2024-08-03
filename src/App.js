@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import { ChakraProvider, Box, VStack, Input, Button, Text, Flex, Spinner } from '@chakra-ui/react';
+import { ChakraProvider, Box, VStack, Input, Button, Text, Flex, Spinner, CSSReset } from '@chakra-ui/react';
 
 const App = () => {
   const [messages, setMessages] = useState([]);
@@ -46,11 +46,20 @@ const App = () => {
 
   return (
     <ChakraProvider>
+      <CSSReset />
+      <style>{`
+        html, body {
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          height: 100%;
+        }
+      `}</style>
       <Box maxWidth="600px" margin="auto" height="100vh" display="flex" flexDirection="column">
-        <Text fontSize="xl" textAlign="center" mt={4} mb={4} position="fixed" top="0" left="50%" transform="translateX(-50%)" width="100%" backgroundColor="white" zIndex="1000">
-          Twilight Imperium Fourth Edition Rules Assistant
+        <Text fontSize="xl" textAlign="center" position="fixed" top="0" left="50%" transform="translateX(-50%)" width="100%" backgroundColor="white" zIndex="1000">
+          Twilight Imperium Fourth Edition Rules AI Assistant
         </Text>
-        <Box mt="60px" flex={1} display="flex" flexDirection="column">
+        <Box mt="50px" flex={1} display="flex" flexDirection="column">
           <VStack 
             spacing={4} 
             align="stretch" 

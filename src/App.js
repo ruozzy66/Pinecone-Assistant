@@ -74,8 +74,8 @@ const App = () => {
                 color={message.role === 'user' ? 'white' : 'black'}
                 borderRadius="lg" 
                 padding={3}
-                dangerouslySetInnerHTML={{ __html: message.content }} // Added to render HTML content
               >
+                <div dangerouslySetInnerHTML={{ __html: message.content }} />
               </Box>
             </Flex>
           ))}

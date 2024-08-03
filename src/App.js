@@ -47,6 +47,9 @@ const App = () => {
   return (
     <ChakraProvider>
       <Box maxWidth="600px" margin="auto" height="100vh" display="flex" flexDirection="column">
+        <Text fontSize="xl" textAlign="center" mt={4} mb={4}>
+          Twilight Imperium Fourth Edition Rules Assistant
+        </Text>
         <VStack 
           spacing={4} 
           align="stretch" 
@@ -110,3 +113,4 @@ const App = () => {
 };
 
 export default App;
+

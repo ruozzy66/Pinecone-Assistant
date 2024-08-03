@@ -71,11 +71,11 @@ const App = () => {
           <Text fontSize="xl">
             Twilight Imperium Fourth Edition Rules Bot
           </Text>
-          <Text fontSize="sm" align="right" mr="4">
+          <Text fontSize="sm" textAlign="right" pr="10px">
             by Andrew Shatilov
           </Text>
         </Box>
-        <Box mt="60px" flex={1} display="flex" flexDirection="column" justifyContent="space-between">
+        <Box mt="70px" flex={1} display="flex" flexDirection="column" justifyContent="space-between">
           <VStack 
             spacing={4} 
             align="stretch" 

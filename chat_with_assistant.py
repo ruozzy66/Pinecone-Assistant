@@ -37,8 +37,8 @@ def chat_with_assistant(api_key, assistant_name, messages):
         response = assistant.chat_completions(messages=chat_context)
         
         # Remove everything after 'References' and format the response
-        #for choice in response.choices:
-        #    choice.message.content = format_response(remove_after_references(choice.message.content))
+        for choice in response.choices:
+            choice.message.content = format_response(remove_after_references(choice.message.content))
         
         # Convert the response to a serializable format
         serializable_response = {

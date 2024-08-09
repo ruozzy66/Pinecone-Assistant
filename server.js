@@ -18,7 +18,7 @@ app.post('/api/chat', (req, res) => {
     pythonPath: 'python3',
     pythonOptions: ['-u'],
     scriptPath: __dirname,
-    args: [process.env.PINECONE_API_KEY, 'ti4-rules-assistant', messages],
+    args: [process.env.PINECONE_API_KEY, 'ti4-late', messages],
     timeout: 30 * 1000 // 30 seconds timeout
   };
 
